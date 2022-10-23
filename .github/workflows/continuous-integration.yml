@@ -9,5 +9,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run linter check
+        run: yarn lint
+
       - name: Run unit tests
-        run: yarn install && yarn test
+        run: yarn test
