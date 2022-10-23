@@ -2,29 +2,25 @@ name: Run CI action
 run-name: CI action on "${{ github.event_name }}" (by ${{ github.actor }})
 on: [push, pull_request]
 jobs:
-  CI:
+  CI_NodeJS:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Use Node.js version - ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          node-version: 'lts/*'
+          node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn
 
       - name: Run linter check
         run: yarn lint
 
       - name: Run unit tests
         run: yarn test
-  CD:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 'lts/*'
-
-      - name: Mocked step
-        run: echo "Not implemented yet"
