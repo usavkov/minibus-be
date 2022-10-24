@@ -61,5 +61,5 @@ jobs:
       #   run: docker build . --tag ${{ env.IMAGE_TAG_NAME }}
 
       - name: Login DockerHub
-        run: docker login -u ${{ secrets.DOCKER_GITHUB_USERNAME }} -p ${{ secrets.DOCKER_GITHUB_TOKEN }}
+        run: echo ${{ secrets.DOCKER_GITHUB_TOKEN }} | docker login -u ${{ secrets.DOCKER_GITHUB_USERNAME }} --password-stdin
 
