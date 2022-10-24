@@ -15,22 +15,23 @@ jobs:
       - name: Use Node.js version - ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          # node-version: ${{ matrix.node-version }}
+          node-version: 16.x
 
       - name: Install dependencies
         run: yarn
 
-      - name: Run linter check
-        run: yarn lint
+      # - name: Run linter check
+      #   run: yarn lint
 
-      - name: Run unit tests and create coverage report
-        run: yarn test:cov
+      # - name: Run unit tests and create coverage report
+      #   run: yarn test:cov
 
-      - name: Publish unit tests report as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: unit-tests-coverage-report
-          path: ${{ env.UNIT_TEST_COVERAGE_DIR }}
+      # - name: Publish unit tests report as artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: unit-tests-coverage-report
+      #     path: ${{ env.UNIT_TEST_COVERAGE_DIR }}
 
   CD:
     runs-on: ubuntu-latest
@@ -40,6 +41,9 @@ jobs:
       IMAGE_TAG_NAME: ${{ github.repository }}:$(date +%s)
 
     steps:
+      - name: Show list of files
+        run: ls
+
       - name: Build docker image
         run: docker build . --file Dockerfile --tag ${{ env.IMAGE_TAG_NAME }}
 
