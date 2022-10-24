@@ -18,13 +18,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn --frozen-lockfile
 
       - name: Run linter check
-        run: npm run lint
+        run: yarn lint
 
       - name: Run unit tests and create coverage report
-        run: npm run test:cov
+        run: yarn test:cov
 
       - name: Publish unit tests report as artifact
         uses: actions/upload-artifact@v3
@@ -35,13 +35,13 @@ jobs:
       - name: Publish lock file
         uses: actions/upload-artifact@v3
         with:
-          name: package-lock.json
-          path: package-lock.json
+          name: yarn.lock
+          path: yarn.lock
 
   CD:
     runs-on: ubuntu-latest
     needs: CI_NodeJS
-    if : ${{ github.ref_name == 'main' }}
+    # if : ${{ github.ref_name == 'main' }}
 
     steps:
       - uses: actions/checkout@v3
@@ -61,5 +61,5 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v3.2.0
         with:
-          push: true
+          push: false
           tags: ${{ github.repository }}:latest
