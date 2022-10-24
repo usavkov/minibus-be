@@ -6,7 +6,7 @@ FROM node:lts-alpine3.15 as base
 FROM base as deps
 WORKDIR /root
 COPY package*.json yarn.lock /root/
-RUN yarn install
+RUN yarn install --ignore-scripts
 
 # Create production build of the app
 FROM deps as build
