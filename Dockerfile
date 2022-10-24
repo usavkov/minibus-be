@@ -5,13 +5,13 @@ FROM node:lts-alpine3.15 as base
 # Install dependencies
 FROM base as deps
 WORKDIR /root
-COPY package*.json yarn.lock /root/
-RUN yarn install
+COPY package*.json /root/
+RUN npm ci
 
 # Create production build of the app
 FROM deps as build
 COPY . .
-RUN yarn build && npm prune --production
+RUN npm run build && npm prune --production
 
 # Get only production resources to start the app
 FROM base as prod
@@ -22,4 +22,4 @@ COPY --from=build /root/package*.json ./
 
 EXPOSE ${PORT}
 
-CMD ["yarn", "start:prod"]
+CMD ["node", "dist/main"]
