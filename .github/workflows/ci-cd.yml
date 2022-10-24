@@ -61,3 +61,6 @@ jobs:
       - name: Login DockerHub
         run: echo ${{ secrets.DOCKER_GITHUB_TOKEN }} | docker login -u ${{ secrets.DOCKER_GITHUB_USERNAME }} --password-stdin
 
+      - name: Push docker image to DockerHub
+        run: docker push ${{ github.repository }}
+
