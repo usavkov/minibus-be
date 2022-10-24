@@ -45,7 +45,7 @@ jobs:
         run: ls
 
       - name: Build docker image
-        run: docker build . --file Dockerfile --tag ${{ env.IMAGE_TAG_NAME }}
+        run: docker build . --tag ${{ env.IMAGE_TAG_NAME }}
 
       - name: Login DockerHub
         run: docker login https://docker.io/v2/ -u "${{ secrets.DOCKER_USER }}" -p {{ secrets.DOCKER_GITHUB_TOKEN }}
