@@ -67,6 +67,8 @@ typings/
 .cache
 
 # generate output
+artifacts
+coverage
 dist
 
 # Serverless directories
