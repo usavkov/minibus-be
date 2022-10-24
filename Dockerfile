@@ -11,7 +11,7 @@ RUN yarn install
 # Create production build of the app
 FROM deps as build
 COPY . .
-RUN yarn build && npm prune --production
+RUN yarn build
 
 # Get only production resources to start the app
 FROM base as prod
