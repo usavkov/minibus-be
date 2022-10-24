@@ -47,11 +47,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Download lock file artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: package-lock.json
-          path: package-lock.json
+      # - name: Download lock file artifact
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: package-lock.json
+      #     path: package-lock.json
 
       - run: ls
 
