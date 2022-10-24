@@ -11,7 +11,8 @@ RUN yarn install --prod
 # Create production build of the app
 FROM deps as build
 COPY . .
-RUN yarn add @nestjs/cli && yarn build
+RUN yarn add @nestjs/cli
+RUN yarn build
 
 # Get only production resources to start the app
 FROM base as prod

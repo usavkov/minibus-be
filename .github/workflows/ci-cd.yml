@@ -47,11 +47,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use LTS Node version
-        uses: actions/setup-node@v3
-        with:
-          node-version: lts/*
-
       - name: Download yarn.lock artifact
         uses: actions/download-artifact@v3
         with:
