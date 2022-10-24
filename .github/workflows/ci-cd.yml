@@ -43,8 +43,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: CI_NodeJS
     # if : ${{ github.ref_name == 'main' }}
-    env:
-      IMAGE_TAG_NAME: ${{ github.repository }}
 
     steps:
       - uses: actions/checkout@v3
@@ -57,8 +55,8 @@ jobs:
 
       - run: ls
 
-      # - name: Build docker image
-      #   run: docker build . --tag ${{ env.IMAGE_TAG_NAME }}
+      - name: Build docker image
+        run: docker build . --tag ${{ github.repository }}
 
       - name: Login DockerHub
         run: echo ${{ secrets.DOCKER_GITHUB_TOKEN }} | docker login -u ${{ secrets.DOCKER_GITHUB_USERNAME }} --password-stdin
