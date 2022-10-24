@@ -41,6 +41,8 @@ jobs:
       IMAGE_TAG_NAME: ${{ github.repository }}:$(date +%s)
 
     steps:
+      - uses: actions/checkout@v3
+
       - name: Show list of files
         run: ls
 
