@@ -3,6 +3,8 @@
 Dockerfile
 
 # compiled output
+/artifacts
+/coverage
 /dist
 /node_modules
 
