@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Backend for MINIBUS.GE app",
   "author": "Yury Saukou | <yury.saukou@gmail.com>",
-  "private": true,
+  "private": false,
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
