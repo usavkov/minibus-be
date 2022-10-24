@@ -6,32 +6,31 @@ jobs:
     env: 
       UNIT_TEST_COVERAGE_DIR: artifacts/coverage-jest/lcov-report/
     runs-on: ubuntu-latest
-    # strategy:
-    #   matrix:
-    #     node-version: [14.x, 16.x, 18.x]
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
     steps:
       - uses: actions/checkout@v3
 
       - name: Use Node.js version - ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          # node-version: ${{ matrix.node-version }}
-          node-version: 16.x
+          node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: npm ci
 
-      # - name: Run linter check
-      #   run: yarn lint
+      - name: Run linter check
+        run: npm run lint
 
-      # - name: Run unit tests and create coverage report
-      #   run: yarn test:cov
+      - name: Run unit tests and create coverage report
+        run: npm run test:cov
 
-      # - name: Publish unit tests report as artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: unit-tests-coverage-report
-      #     path: ${{ env.UNIT_TEST_COVERAGE_DIR }}
+      - name: Publish unit tests report as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit-tests-coverage-report
+          path: ${{ env.UNIT_TEST_COVERAGE_DIR }}
 
       - name: Publish lock file
         uses: actions/upload-artifact@v3
@@ -47,19 +46,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # - name: Download lock file artifact
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: package-lock.json
-      #     path: package-lock.json
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
 
-      - run: ls
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Build docker image
-        run: docker build . --tag ${{ github.repository }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_GITHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_GITHUB_TOKEN }}
 
-      - name: Login DockerHub
-        run: echo ${{ secrets.DOCKER_GITHUB_TOKEN }} | docker login -u ${{ secrets.DOCKER_GITHUB_USERNAME }} --password-stdin
-
-      - name: Push docker image to DockerHub
-        run: docker push ${{ github.repository }}
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3.2.0
+        with:
+          push: true
+          tags: ${{ github.repository }}:latest
