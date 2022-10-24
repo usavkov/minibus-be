@@ -19,7 +19,7 @@ jobs:
           node-version: 16.x
 
       - name: Install dependencies
-        run: yarn
+        run: npm ci
 
       # - name: Run linter check
       #   run: yarn lint
@@ -33,11 +33,11 @@ jobs:
       #     name: unit-tests-coverage-report
       #     path: ${{ env.UNIT_TEST_COVERAGE_DIR }}
 
-      - name: Publish yarn.lock file
+      - name: Publish lock file
         uses: actions/upload-artifact@v3
         with:
-          name: yarn.lock
-          path: yarn.lock
+          name: package-lock.json
+          path: package-lock.json
 
   CD:
     runs-on: ubuntu-latest
@@ -47,11 +47,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Download yarn.lock artifact
+      - name: Download lock file artifact
         uses: actions/download-artifact@v3
         with:
-          name: yarn.lock
-          path: yarn.lock
+          name: package-lock.json
+          path: package-lock.json
 
       - run: ls
 
