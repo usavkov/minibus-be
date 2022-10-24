@@ -63,4 +63,3 @@ jobs:
 
       - name: Push docker image to DockerHub
         run: docker push ${{ github.repository }}
-
