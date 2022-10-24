@@ -6,9 +6,9 @@ jobs:
     env: 
       UNIT_TEST_COVERAGE_DIR: artifacts/coverage-jest/lcov-report/
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
+    # strategy:
+    #   matrix:
+    #     node-version: [14.x, 16.x, 18.x]
     steps:
       - uses: actions/checkout@v3
 
