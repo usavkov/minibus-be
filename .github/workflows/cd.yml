@@ -2,7 +2,7 @@ name: Run Continious Delivery action
 run-name: CD action 
 on:
   schedule:
-    - cron: '35 7 * * 0-6'
+    - cron: '0 0 * * 0-6'
 
 jobs:
   CD:
