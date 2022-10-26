@@ -30,6 +30,6 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ DOCKER_GITHUB_USERNAME }}/minibus-be:latest
+          tags: ${{ secrets.DOCKER_GITHUB_USERNAME }}/minibus-be:latest
           cache-from: type=registry,ref=${{ secrets.DOCKER_GITHUB_USERNAME }}/minibus-be:buildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_GITHUB_USERNAME }}/minibus-be:buildcache,mode=max
