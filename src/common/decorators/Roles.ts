@@ -7,7 +7,7 @@ import { Role, ROLES_KEY } from '../constants';
  *
  * E.g:
  *
- * \@Roles([admin, support])
+ * \@Roles('admin', 'support')
  * \@Get('users')
  * getUsers() {}
  */

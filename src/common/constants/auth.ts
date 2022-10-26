@@ -9,4 +9,15 @@ export enum Role {
   admin = 'admin',
 }
 
+export enum Action {
+  create = 'create',
+  read = 'read',
+  update = 'update',
+  delete = 'delete',
+  manage = 'manage', // for CASL means 'any'
+}
+
+export type Permission = string;
+
 export const ROLES_KEY = 'roles';
+export const PERMISSIONS_KEY = 'permissions';

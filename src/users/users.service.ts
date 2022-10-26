@@ -11,6 +11,7 @@ export class UsersService {
       username: 'john',
       password: 'changeme',
       roles: ['user'],
+      perms: ['profile-settings.item.get', 'users.item.get'],
     },
     {
       userId: 2,

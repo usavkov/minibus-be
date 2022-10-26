@@ -16,6 +16,7 @@ export class AuthService {
 
     if (user && user.password === pass) {
       const { password, ...result } = user;
+
       return result;
     }
 
@@ -27,7 +28,7 @@ export class AuthService {
     const payload = {
       username: user.username,
       sub: user.userId,
-      roles: user.roles,
+      ...user,
     };
 
     return {
