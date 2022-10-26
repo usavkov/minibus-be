@@ -8,7 +8,7 @@ import { IS_PUBLIC_ROUTE_KEY } from '../constants';
  * E.g:
  *
  * \@Public
- * \@Get(users)
+ * \@Get('users')
  * getUsers() {}
  */
 export const Public = () => SetMetadata(IS_PUBLIC_ROUTE_KEY, true);
