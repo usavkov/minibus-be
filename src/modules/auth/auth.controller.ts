@@ -1,12 +1,10 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 
-import { Public, RequirePermissions, UseLogging } from '../common/decorators';
+import {
+  Public,
+  RequirePermissions,
+  UseLogging,
+} from '../../common/decorators';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards';
 

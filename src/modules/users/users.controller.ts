@@ -1,11 +1,7 @@
-import {
-  Controller,
-  Get,
-  Request,
-} from '@nestjs/common';
+import { Controller, Get, Request } from '@nestjs/common';
 
-import { Role } from '../common/constants';
-import { Roles, RequirePermissions, UseLogging } from '../common/decorators';
+import { Role } from '../../common/constants';
+import { Roles, RequirePermissions, UseLogging } from '../../common/decorators';
 
 // TODO: properly implement policies handling
 import usersPermissions from './users.permissions';

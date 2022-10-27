@@ -1,4 +1,4 @@
-import { AuthController } from '../../src/auth';
+import { AuthController } from '../../src/modules/auth';
 import { getAuthModuleMock } from '../helpers';
 
 describe('AuthController', () => {

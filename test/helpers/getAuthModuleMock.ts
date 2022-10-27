@@ -2,13 +2,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { UsersModule } from '../../src/users';
+import { UsersModule } from '../../src/modules/users';
 import {
   AuthController,
   AuthService,
   JwtStrategy,
   LocalStrategy,
-} from '../../src/auth';
+} from '../../src/modules/auth';
 
 const SECRET = 'secret';
 process.env.JWT_SECRET = SECRET;

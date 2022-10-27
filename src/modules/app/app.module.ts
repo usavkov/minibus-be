@@ -8,9 +8,9 @@ import {
   JwtAuthGuard,
   PermissionsGuard,
   RolesGuard,
-} from './auth';
-import { LoggerMiddleware } from './common/middleware';
-import { UsersModule } from './users';
+} from '../../modules/auth';
+import { LoggerMiddleware } from '../../common/middleware';
+import { UsersModule } from '../../modules/users';
 
 @Module({
   imports: [AuthModule, UsersModule],

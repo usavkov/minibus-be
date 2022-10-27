@@ -2,8 +2,8 @@ import 'dotenv/config';
 
 import { NestFactory } from '@nestjs/core';
 
-import { AppModule } from './app.module';
 import { getLogLevels } from './common/helpers';
+import { AppModule } from './modules/app';
 
 const PORT = process.env.PORT || 3000;
 
