@@ -4,7 +4,7 @@ import {
   Public,
   RequirePermissions,
   UseLogging,
-} from '../../common/decorators';
+} from '@common/decorators';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards';
 

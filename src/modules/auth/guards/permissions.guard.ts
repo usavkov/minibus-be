@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { Permission, PERMISSIONS_KEY } from '../../../common/constants';
+import { Permission, PERMISSIONS_KEY } from '@common/constants';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
