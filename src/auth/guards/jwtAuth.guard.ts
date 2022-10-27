@@ -1,4 +1,4 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -10,11 +10,16 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
+  private readonly logger = new Logger(JwtAuthGuard.name);
+
   canActivate(context: ExecutionContext) {
     const isPublic = this.reflector.getAllAndOverride<boolean>(
       IS_PUBLIC_ROUTE_KEY,
-      [context.getHandler(), context.getClass()],
+      [context.getHandler(), context.getClass()]
     );
+
+    // TODO: unify logging
+    this.logger.verbose(`Route is ${isPublic ? 'public' : 'protected'}`);
 
     if (isPublic) return true;
 

@@ -6,10 +6,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { Public } from '../common/decorators';
+import { Public, RequirePermissions, UseLogging } from '../common/decorators';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards';
 
+@UseLogging()
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -21,6 +22,7 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
+  @RequirePermissions('test')
   @Get('test')
   async test(@Request() req) {
     return req.user;
