@@ -5,10 +5,12 @@ import {
 } from '@nestjs/common';
 
 import { Role } from '../common/constants';
-import { Roles, RequirePermissions } from '../common/decorators';
+import { Roles, RequirePermissions, UseLogging } from '../common/decorators';
+
 // TODO: properly implement policies handling
 import usersPermissions from './users.permissions';
 
+@UseLogging()
 @Controller('users')
 export class UsersController {
   @Roles(Role.admin, Role.support, Role.user)
