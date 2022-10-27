@@ -1,4 +1,4 @@
-import { AuthService } from '../../src/modules/auth';
+import { AuthService } from '@modules/auth';
 import { getAuthModuleMock } from '../helpers';
 
 describe('AuthService', () => {

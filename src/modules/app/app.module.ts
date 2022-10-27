@@ -9,9 +9,9 @@ import {
   JwtAuthGuard,
   PermissionsGuard,
   RolesGuard,
-} from '../../modules/auth';
-import { DatabaseModule } from '../../modules/database';
-import { UsersModule } from '../../modules/users';
+} from '@modules/auth';
+import { DatabaseModule } from '@modules/database';
+import { UsersModule } from '@modules/users';
 
 @Module({
   imports: [AuthModule, DatabaseModule, UsersModule],
