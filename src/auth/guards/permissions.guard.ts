@@ -1,4 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  Logger,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 import { Permission, PERMISSIONS_KEY } from '../../common/constants';
@@ -7,20 +12,23 @@ import { Permission, PERMISSIONS_KEY } from '../../common/constants';
 export class PermissionsGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
+  private readonly logger = new Logger(PermissionsGuard.name);
+
   canActivate(context: ExecutionContext): boolean {
     const requiredPermissions = this.reflector.getAllAndOverride<Permission[]>(
       PERMISSIONS_KEY,
-      [context.getHandler(), context.getClass()],
+      [context.getHandler(), context.getClass()]
     );
 
     if (!requiredPermissions?.length) return true;
 
     const { user } = context.switchToHttp().getRequest();
 
-    console.log('requiredPermissions', requiredPermissions);
-    console.log('user.perms', user.perms);
+    // TODO: unify logging
+    this.logger.verbose(`Required permissions:\n${JSON.stringify(requiredPermissions, null, 2)}\n---\nUser permissions:\n${JSON.stringify(user.perms, null, 2)}`);
 
-    // TODO: return missed permissons together with error payload
-    return requiredPermissions.every((perm: Permission) => user.perms?.includes(perm));
+    return requiredPermissions.every((perm: Permission) =>
+      user.perms?.includes(perm)
+    );
   }
 }
