@@ -1,1 +1,3 @@
-export const ONE_DAY = 24 * 60 * 60 * 100;
+export const MINUTE = 60; // in seconds
+export const HOUR = 60 * MINUTE;
+export const DAY = 24 * HOUR;

@@ -14,7 +14,7 @@ export class AuthService {
 
   // TODO: use bcrypt to encrypt/decrypt password
   async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.findOneBy({ username });
 
     if (user && user.password === pass) {
       // TODO: define fields, that should be ommited

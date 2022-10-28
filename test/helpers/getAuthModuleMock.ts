@@ -7,8 +7,8 @@ import {
   AuthService,
   JwtStrategy,
   LocalStrategy,
-} from '@modules/auth';
-import { UsersModule } from '@modules/users';
+} from '%modules/auth';
+import { UsersModule } from '%modules/users';
 
 const SECRET = 'secret';
 process.env.JWT_SECRET = SECRET;
