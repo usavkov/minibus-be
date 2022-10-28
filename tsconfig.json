@@ -19,7 +19,6 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "%common/*": ["./src/common/*"],
-      "%entities/*": ["./src/entities/*"],
       "%modules/*": ["./src/modules/*"],
     },
   }

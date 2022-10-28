@@ -3,7 +3,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { LoggerMiddleware } from '%common/middleware';
 import {
   AuthModule,
   JwtAuthGuard,
@@ -14,6 +13,7 @@ import { ConfigService } from '%modules/config';
 import { UsersModule } from '%modules/users';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { LoggerMiddleware } from '../../middleware';
 
 const { NODE_ENV, PG_HOST, PG_PORT, PG_USER, PG_PASSWORD, PG_DB } = process.env;
 

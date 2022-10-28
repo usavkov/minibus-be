@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { User } from '%entities/user.entity';
+import { User } from './users.entity';
 
-import type { FindOptionsWhere } from 'typeorm';
+import type { FindManyOptions, FindOptionsWhere } from 'typeorm';
+import type { CreateUserDto } from './dto';
 
 @Injectable()
 export class UsersService {
@@ -12,21 +13,30 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>
   ) {}
-  // TODO: connect to db and select user
 
-  async findOneBy(options: FindOptionsWhere<User>): Promise<User | undefined> {
-    const res = await this.usersRepository.findOneBy(options);
+  async create(createUserDto: CreateUserDto): Promise<User | undefined> {
+    const newUser = this.usersRepository.create(createUserDto);
 
-    console.log(res);
-
-    return;
+    return this.usersRepository.save(newUser);
   }
 
-  async findOne(id: string): Promise<User | undefined> {
+  async findAll(options?: FindManyOptions<User>): Promise<User[] | undefined> {
+    const res = await this.usersRepository.find(options);
+
+    return res;
+  }
+
+  async findOneBy(options: FindOptionsWhere<User>): Promise<User | undefined> {
+    const res = await this.usersRepository.findOneByOrFail(options);
+
+    return res;
+  }
+
+  async findOneById(id: string): Promise<User | undefined> {
     const res = await this.findOneBy({ id });
 
     console.log(res);
 
-    return;
+    return res;
   }
 }
