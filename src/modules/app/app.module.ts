@@ -2,8 +2,6 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
 import { LoggerMiddleware } from '@common/middleware';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import {
   AuthModule,
   JwtAuthGuard,
@@ -12,6 +10,8 @@ import {
 } from '@modules/auth';
 import { DatabaseModule } from '@modules/database';
 import { UsersModule } from '@modules/users';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, UsersModule],
