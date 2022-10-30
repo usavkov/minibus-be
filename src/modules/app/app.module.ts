@@ -10,6 +10,7 @@ import {
   RolesGuard,
 } from '%modules/auth';
 import { ConfigService } from '%modules/config';
+import { PermissionsModule } from '%modules/permissions';
 import { RolesModule } from '%modules/roles';
 import { UsersModule } from '%modules/users';
 import { AppController } from './app.controller';
@@ -24,6 +25,7 @@ const isDev = NODE_ENV !== 'production';
   imports: [
     AuthModule,
     ConfigModule.forRoot(),
+    PermissionsModule,
     RolesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
