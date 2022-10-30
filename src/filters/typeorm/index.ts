@@ -1,46 +1,39 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
-import { EntityNotFoundError, TypeORMError } from 'typeorm';
+import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
+import { TypeORMError } from 'typeorm';
 
-const errorsMap = new Map();
+import { EntityNotFoundExceptionFilters } from './entity-not-found.filter';
 
-// NotFoundException
-errorsMap.set(
-  [EntityNotFoundError.name],
-  (exception: TypeORMError, host: ArgumentsHost) => {
-    const error = new NotFoundException(
-      exception.message
-    ).getResponse() as object;
+// TODO: required refactoring: what if error will be on GraphQL layer?
 
-    return {
-      ...error,
-      code: exception.name,
-      stack: exception.stack,
-    };
-  }
-);
+const exceptionFilters = {
+  EntityNotFoundError: EntityNotFoundExceptionFilters,
+} as { [key: string]: any };
 
 @Catch(TypeORMError)
 export class TypeOrmExceptionFilters implements ExceptionFilter {
   private readonly logger = new Logger(TypeOrmExceptionFilters.name);
 
   public catch(exception: TypeORMError, host: ArgumentsHost) {
-    const response = host.switchToHttp().getResponse();
+    const Filter = exceptionFilters[exception.name];
 
-    const [, getError] = [...errorsMap.entries()].find(([errorClasses]) =>
-      errorClasses.includes(exception.name)
-    );
+    if (Filter) {
+      return new Filter().catch(exception, host);
+    }
 
-    const { stack, ...error } = getError(exception, host);
+    const { name, message, stack } = exception;
 
-    this.logger.log(`${exception.name} | ${error.message}`);
+    const context = host.switchToHttp();
+
+    // TODO: unify logger
+    this.logger.error(`${name} | ${message}`);
     this.logger.debug(stack);
 
-    response.status(error.statusCode).json(error);
+    return context
+      .getResponse()
+      .status(500)
+      .json({
+        name,
+        message,
+      });
   }
 }

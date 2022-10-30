@@ -25,10 +25,10 @@ export class PermissionsGuard implements CanActivate {
     const { user } = context.switchToHttp().getRequest();
 
     // TODO: unify logging
-    this.logger.verbose(`Required permissions:\n${JSON.stringify(requiredPermissions, null, 2)}\n---\nUser permissions:\n${JSON.stringify(user.perms, null, 2)}`);
+    this.logger.verbose(`Required permissions:\n${JSON.stringify(requiredPermissions, null, 2)}\n---\nUser permissions:\n${JSON.stringify(user.permissions, null, 2)}`);
 
     return requiredPermissions.every((perm: Permission) =>
-      user.perms?.includes(perm)
+      user.permissions?.includes(perm)
     );
   }
 }

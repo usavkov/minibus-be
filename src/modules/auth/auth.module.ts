@@ -11,7 +11,6 @@ import { JwtStrategy, LocalStrategy } from './strategies';
 @Module({
   imports: [
     JwtModule.register({
-      // TODO: probaly should to use config service
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: DAY },
     }),

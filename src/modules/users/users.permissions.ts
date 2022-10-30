@@ -1,12 +1,19 @@
 // TODO: implement permissions functionality (Policies)
 
 export default {
+  create: [
+    'users.item.post',
+  ],
+  update: [
+    'users.item.put',
+  ],
+  delete: [
+    'users.item.delete',
+  ],
   getAll: [
-    'profile-settings.item.get',
-    'users.item.get',
+    'users.collection.get',
   ],
   getById: [
-    'profile-settings.item.get',
     'users.item.get',
   ],
 };

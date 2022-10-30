@@ -4,6 +4,8 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  private readonly logger = new Logger(JwtStrategy.name);
+
   constructor() {
     // TODO: make invalidation of token on some actions like change permissions, roles, etc.
     super({
@@ -13,8 +15,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: process.env.JWT_SECRET,
     });
   }
-
-  private readonly logger = new Logger(JwtStrategy.name);
 
   // TODO: replace 'any' type
   async validate(payload: any) {

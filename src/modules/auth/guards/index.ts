@@ -1,5 +1,5 @@
-export { GqlAuthGuard } from './gqlAuth.guard';
-export { JwtAuthGuard } from './jwtAuth.guard';
-export { LocalAuthGuard } from './localAuth.guard';
+export { GqlAuthGuard } from './gql-auth.guard';
+export { JwtAuthGuard } from './jwt-auth.guard';
+export { LocalAuthGuard } from './local-auth.guard';
 export { PermissionsGuard } from './permissions.guard';
 export { RolesGuard } from './roles.guard';

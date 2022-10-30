@@ -17,6 +17,8 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User | undefined> {
     const newUser = this.usersRepository.create(createUserDto);
 
+    console.log('newUser', newUser);
+
     return this.usersRepository.save(newUser);
   }
 
@@ -34,8 +36,6 @@ export class UsersService {
 
   async findOneById(id: string): Promise<User | undefined> {
     const res = await this.findOneBy({ id });
-
-    console.log(res);
 
     return res;
   }

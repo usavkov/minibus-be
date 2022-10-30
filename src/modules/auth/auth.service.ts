@@ -1,7 +1,8 @@
 import { Injectable, Logger, LoggerService } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { UsersService } from '../users';
+import { User, UsersService } from '%modules/users';
+import { CreateUserDto } from '%modules/users/dto';
 
 @Injectable()
 export class AuthService {
@@ -31,17 +32,21 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    console.log(this.logger);
+  async login(user: Partial<User>) {
     // TODO: adjust user fields with schema
     const payload = {
+      sub: user.id,
       username: user.username,
-      sub: user.userId,
-      ...user,
+      roles: user.roles,
+      permissions: user.permissions,
     };
 
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async register(user: CreateUserDto) {
+    return this.usersService.create(user);
   }
 }

@@ -3,8 +3,9 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  Post,
   Param,
+  ParseUUIDPipe,
+  Post,
   Req,
   UseInterceptors,
 } from '@nestjs/common';
@@ -24,23 +25,25 @@ import usersPermissions from './users.permissions';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
-  @Roles(Role.admin, Role.support, Role.user)
+  @Roles(Role.admin, Role.support)
   @RequirePermissions(...usersPermissions.getAll)
   @Get()
   async getAllUsers(@Req() req: Request) {
-    // console.log(req);
+    console.log(req.user);
     return this.usersService.findAll();
   }
 
   @Roles(Role.admin, Role.support, Role.user)
   @RequirePermissions(...usersPermissions.getById)
   @Get(':id')
-  async getUser(@Param('id') id: string) {
+  async getUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.findOneById(id);
+  }
+
+  @Roles(Role.admin, Role.support)
+  @RequirePermissions(...usersPermissions.create)
+  @Post()
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
   }
 }

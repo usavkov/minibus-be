@@ -1,14 +1,20 @@
 import { Exclude } from 'class-transformer';
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
+  VersionColumn,
+  // VirtualColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
+  @VersionColumn()
+  _version: number;
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -16,7 +22,7 @@ export class User {
   username: string;
 
   @Exclude()
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column()
@@ -25,8 +31,8 @@ export class User {
   @Column()
   lastName: string;
 
-  @Column({ default: true })
-  isActive: boolean;
+  // @VirtualColumn({ default: true })
+  // isActive: boolean;
 
   @Column({ unique: true })
   email: string;
@@ -34,9 +40,26 @@ export class User {
   @Column({ unique: true })
   phoneNumber: string;
 
+  // ---
+
+  @Column('text', {
+    array: true,
+  })
+  roles: string[];
+
+  @Column('text', {
+    array: true,
+  })
+  permissions: string[];
+
+  // ---
+
   @CreateDateColumn()
-  createdDate: number;
+  createdDate: Date;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: Date;
+
+  @DeleteDateColumn()
+  deletedDate: Date;
 }
