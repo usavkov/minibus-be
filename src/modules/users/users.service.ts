@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { omit } from 'lodash/fp';
 import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 
 import { RolesService } from '%modules/roles';
@@ -17,19 +18,19 @@ export class UsersService {
     private rolesService: RolesService
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User | undefined> {
+  async create(
+    createUserDto: CreateUserDto
+  ): Promise<Omit<User, 'password'> | undefined> {
     const newUser = this.usersRepository.create(createUserDto);
 
-    console.log('newUser', newUser);
-
-    return this.usersRepository.save(newUser);
+    return this.usersRepository.save(newUser).then(omit('password'));
   }
 
   async findAll(options?: FindManyOptions<User>): Promise<User[] | undefined> {
     const res = await this.usersRepository.find(options);
 
     // TODO: remove - it's just to see results
-    console.log(await this.rolesService.findAll());
+    console.log('roles', await this.rolesService.findAll());
 
     return res;
   }

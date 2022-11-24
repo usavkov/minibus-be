@@ -9,16 +9,16 @@ import { CreateUserDto } from '%modules/users/dto';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    private readonly passwordHelper: PasswordHelper
   ) {}
 
   private readonly logger: LoggerService = new Logger(AuthService.name);
 
-  // TODO: use bcrypt to encrypt/decrypt password
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneBy({ username });
 
-    if (user && (await PasswordHelper.compare(pass, user.password))) {
+    if (user && (await this.passwordHelper.compare(pass, user.password))) {
       // TODO: define fields, that should be ommited
       const { password: _, ...result } = user;
 

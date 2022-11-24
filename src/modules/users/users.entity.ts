@@ -16,6 +16,8 @@ import { TableName } from '%common/constants';
 import { PasswordHelper } from '%common/helpers';
 import { Role } from '%modules/roles';
 
+const passwordHelper = new PasswordHelper();
+
 @Entity({ name: TableName.users })
 export class User {
   @VersionColumn()
@@ -72,6 +74,6 @@ export class User {
 
   @BeforeInsert()
   private async encryptPassword(): Promise<void> {
-    this.password = await PasswordHelper.encrypt(this.password);
+    this.password = await passwordHelper.encrypt(this.password);
   }
 }
