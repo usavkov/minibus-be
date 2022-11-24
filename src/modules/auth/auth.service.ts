@@ -16,7 +16,10 @@ export class AuthService {
   private readonly logger: LoggerService = new Logger(AuthService.name);
 
   async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOneBy({ username });
+    const user = await this.usersService.findOneOrFail({
+      where: { username },
+      relations: ['roles'],
+    });
 
     if (user && (await this.passwordHelper.compare(pass, user.password))) {
       // TODO: define fields, that should be ommited
@@ -42,8 +45,13 @@ export class AuthService {
     const payload = {
       sub: user.id,
       username: user.username,
-      roles: user.roles,
-      permissions: user.permissions,
+      roles: user.roles.map(({ name }) => name),
+      permissions: [
+        ...new Set([
+          ...user.permissions,
+          ...user.roles.flatMap(({ permissions }) => permissions),
+        ]),
+      ],
     };
 
     return {

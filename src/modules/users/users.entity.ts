@@ -5,8 +5,10 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
   VersionColumn,
   // VirtualColumn,
@@ -67,13 +69,10 @@ export class User {
 
   // ---
 
-  @ManyToMany(() => Role, (roles) => roles.users)
-  roles: string[];
+  @JoinTable({ name: TableName.usersRoles })
+  @ManyToMany(() => Role, (roles) => roles.users, { cascade: true })
+  roles: Role[];
 
-  // ---
-
-  @BeforeInsert()
-  private async encryptPassword(): Promise<void> {
-    this.password = await passwordHelper.encrypt(this.password);
-  }
+  @RelationId((user: User) => user.roles)
+  roleIds: number[];
 }

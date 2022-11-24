@@ -1,8 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { omit } from 'lodash/fp';
-import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
+import {
+  FindManyOptions,
+  FindOneOptions,
+  FindOptionsWhere,
+  Repository,
+} from 'typeorm';
 
+import { RoleName } from '%common/constants';
+import { PasswordHelper } from '%common/helpers';
 import { RolesService } from '%modules/roles';
 
 import { User } from './users.entity';
@@ -15,34 +22,59 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
 
-    private rolesService: RolesService
+    private rolesService: RolesService,
+    private passwordHelper: PasswordHelper
   ) {}
 
   async create(
     createUserDto: CreateUserDto
   ): Promise<Omit<User, 'password'> | undefined> {
-    const newUser = this.usersRepository.create(createUserDto);
+    const { password, ...newUser } = this.usersRepository.create(createUserDto);
+    const encryptedPassword = await this.passwordHelper.encrypt(password);
 
-    return this.usersRepository.save(newUser).then(omit('password'));
+    // TODO: upsert
+    // Assign newly created user role - "user"
+    const userRole = await this.rolesService.findOneBy({ name: RoleName.user });
+
+    return this.usersRepository
+      .save({
+        ...newUser,
+        password: encryptedPassword,
+        roles: [userRole].filter(Boolean),
+      })
+      .then(omit('password'));
   }
 
   async findAll(options?: FindManyOptions<User>): Promise<User[] | undefined> {
     const res = await this.usersRepository.find(options);
 
-    // TODO: remove - it's just to see results
-    console.log('roles', await this.rolesService.findAll());
+    return res;
+  }
+
+  async findOneOrFail(
+    options: FindOneOptions<User>
+  ): Promise<User | undefined> {
+    const res = await this.usersRepository.findOneOrFail(options);
 
     return res;
   }
 
   async findOneBy(options: FindOptionsWhere<User>): Promise<User | undefined> {
+    const res = await this.usersRepository.findOneBy(options);
+
+    return res;
+  }
+
+  async findOneByOrFail(
+    options: FindOptionsWhere<User>
+  ): Promise<User | undefined> {
     const res = await this.usersRepository.findOneByOrFail(options);
 
     return res;
   }
 
-  async findOneById(id: string): Promise<User | undefined> {
-    const res = await this.findOneBy({ id });
+  async findOneByIdOrFail(id: string): Promise<User | undefined> {
+    const res = await this.findOneByOrFail({ id });
 
     return res;
   }

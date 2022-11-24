@@ -6,13 +6,12 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
-  Req,
   UseInterceptors,
 } from '@nestjs/common';
-import { Request } from 'express';
 
-import { Role } from '%common/constants';
+import { RoleName } from '%common/constants';
 import { Roles, RequirePermissions, UseLogging } from '%common/decorators';
+
 import { CreateUserDto } from './dto';
 import { UsersService } from './users.service';
 
@@ -25,22 +24,21 @@ import usersPermissions from './users.permissions';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Roles(Role.admin, Role.support)
+  @Roles(RoleName.admin, RoleName.support)
   @RequirePermissions(...usersPermissions.getAll)
   @Get()
-  async getAllUsers(@Req() req: Request) {
-    console.log(req.user);
+  async getAllUsers() {
     return this.usersService.findAll();
   }
 
-  @Roles(Role.admin, Role.support, Role.user)
+  @Roles(RoleName.admin, RoleName.support, RoleName.user)
   @RequirePermissions(...usersPermissions.getById)
   @Get(':id')
   async getUser(@Param('id', ParseUUIDPipe) id: string) {
-    return this.usersService.findOneById(id);
+    return this.usersService.findOneByIdOrFail(id);
   }
 
-  @Roles(Role.admin, Role.support)
+  @Roles(RoleName.admin, RoleName.support)
   @RequirePermissions(...usersPermissions.create)
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {

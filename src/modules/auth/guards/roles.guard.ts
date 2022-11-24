@@ -1,12 +1,13 @@
 import {
   CanActivate,
   ExecutionContext,
+  Inject,
   Injectable,
   Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { Role, ROLES_KEY } from '%common/constants';
+import { RoleName, ROLES_KEY } from '%common/constants';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -14,21 +15,25 @@ export class RolesGuard implements CanActivate {
 
   constructor(private reflector: Reflector) {}
 
-  canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const requiredRoles = this.reflector.getAllAndOverride<RoleName[]>(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()]
+    );
 
     if (!requiredRoles?.length) return true;
 
     const { user } = context.switchToHttp().getRequest();
 
-    console.log('user', user)
-
     // TODO: unify logging
-    this.logger.verbose(`Required roles:\n${JSON.stringify(requiredRoles, null, 2)}\n---\nUser roles:\n${JSON.stringify(user.roles, null, 2)}`);
+    this.logger.verbose(
+      `Required roles:\n${JSON.stringify(
+        requiredRoles,
+        null,
+        2
+      )}\n---\nUser roles:\n${JSON.stringify(user.roles, null, 2)}`
+    );
 
-    return requiredRoles.some((role: Role) => user.roles?.includes(role));
+    return requiredRoles.some((role: RoleName) => user.roles?.includes(role));
   }
 }

@@ -1,5 +1,5 @@
 // TODO: store roles in database
-export enum Role {
+export enum RoleName {
   user = 'user',
   staff = 'staff',
   driver = 'driver',
