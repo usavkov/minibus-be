@@ -1,16 +1,22 @@
 import { Exclude } from 'class-transformer';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
   // VirtualColumn,
 } from 'typeorm';
 
-@Entity({ name: 'users' })
+import { TableName } from '%common/constants';
+import { PasswordHelper } from '%common/helpers';
+import { Role } from '%modules/roles';
+
+@Entity({ name: TableName.users })
 export class User {
   @VersionColumn()
   _version: number;
@@ -22,7 +28,7 @@ export class User {
   username: string;
 
   @Exclude()
-  @Column({ select: false })
+  @Column()
   password: string;
 
   @Column()
@@ -41,12 +47,6 @@ export class User {
   phoneNumber: string;
 
   // ---
-
-  @Column('text', {
-    array: true,
-  })
-  roles: string[];
-
   @Column('text', {
     array: true,
   })
@@ -62,4 +62,16 @@ export class User {
 
   @DeleteDateColumn()
   deletedDate: Date;
+
+  // ---
+
+  @ManyToMany(() => Role, (roles) => roles.users)
+  roles: string[];
+
+  // ---
+
+  @BeforeInsert()
+  private async encryptPassword(): Promise<void> {
+    this.password = await PasswordHelper.encrypt(this.password);
+  }
 }

@@ -13,13 +13,11 @@ import { ConfigService } from '%modules/config';
 import { PermissionsModule } from '%modules/permissions';
 import { RolesModule } from '%modules/roles';
 import { UsersModule } from '%modules/users';
+
+import { typeOrmModuleOptions } from '../../../typeorm.config';
+import { LoggerMiddleware } from '../../middleware';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { LoggerMiddleware } from '../../middleware';
-
-const { NODE_ENV, PG_HOST, PG_PORT, PG_USER, PG_PASSWORD, PG_DB } = process.env;
-
-const isDev = NODE_ENV !== 'production';
 
 @Module({
   imports: [
@@ -27,16 +25,7 @@ const isDev = NODE_ENV !== 'production';
     ConfigModule.forRoot(),
     PermissionsModule,
     RolesModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: PG_HOST,
-      port: +PG_PORT,
-      username: PG_USER,
-      password: PG_PASSWORD,
-      database: PG_DB,
-      synchronize: isDev,
-      autoLoadEntities: true,
-    }),
+    TypeOrmModule.forRoot(typeOrmModuleOptions),
     UsersModule,
   ],
   controllers: [AppController],

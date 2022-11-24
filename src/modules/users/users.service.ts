@@ -1,17 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
+
+import { RolesService } from '%modules/roles';
 
 import { User } from './users.entity';
 
-import type { FindManyOptions, FindOptionsWhere } from 'typeorm';
 import type { CreateUserDto } from './dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>
+    private usersRepository: Repository<User>,
+
+    private rolesService: RolesService
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User | undefined> {
@@ -24,6 +27,9 @@ export class UsersService {
 
   async findAll(options?: FindManyOptions<User>): Promise<User[] | undefined> {
     const res = await this.usersRepository.find(options);
+
+    // TODO: remove - it's just to see results
+    console.log(await this.rolesService.findAll());
 
     return res;
   }

@@ -20,7 +20,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const user = await this.authService.validateUser(username, password);
 
     // TODO: unify logging
-    this.logger.log((!!user ? ` User "${user.username}" was found` : 'User with such credentials was not found') + ` +${Date.now() - now}ms`);
+    this.logger.log(
+      (!!user
+        ? ` User "${user.username}" was found`
+        : 'User with such credentials was not found') +
+        ` +${Date.now() - now}ms`
+    );
 
     if (!user) {
       throw new UnauthorizedException();

@@ -1,6 +1,7 @@
 import { Injectable, Logger, LoggerService } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
+import { PasswordHelper } from '%common/helpers';
 import { User, UsersService } from '%modules/users';
 import { CreateUserDto } from '%modules/users/dto';
 
@@ -17,16 +18,20 @@ export class AuthService {
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneBy({ username });
 
-    if (user && user.password === pass) {
+    if (user && (await PasswordHelper.compare(pass, user.password))) {
       // TODO: define fields, that should be ommited
-      const { password, ...result } = user;
+      const { password: _, ...result } = user;
 
       return result;
     }
 
     // TODO: use constants instead of text
     this.logger.verbose(
-      `INVALID CREDENTIALS. Input:\n---\n${JSON.stringify({ username, pass }, null, 2)}\n---`
+      `INVALID CREDENTIALS. Input:\n---\n${JSON.stringify(
+        { username, pass },
+        null,
+        2
+      )}\n---`
     );
 
     return null;
